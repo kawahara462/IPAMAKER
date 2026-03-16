@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cloud IPA Builder</title>
+</head>
+
+<body>
+
+<h2>Cloud IPA Builder</h2>
+
+<p>Limits:</p>
+<ul>
+<li>1 build per hour</li>
+<li>3 builds per day</li>
+<li>Max file: 0.5GB</li>
+<li>Files auto delete after 24h</li>
+</ul>
+
+<input type="file" id="file">
+
+<button onclick="upload()">Build IPA</button>
+
+<pre id="log"></pre>
+
+<script>
+
+async function upload(){
+
+let file=document.getElementById("file").files[0]
+
+if(!file){
+ alert("select file")
+ return
+}
+
+if(file.size>500*1024*1024){
+ alert("File too big")
+ return
+}
+
+let form=new FormData()
+
+form.append("file",file)
+
+document.getElementById("log").textContent="Uploading..."
+
+let res=await fetch("/upload",{
+ method:"POST",
+ body:form
+})
+
+let txt=await res.text()
+
+document.getElementById("log").textContent=txt
+
+}
+
+</script>
+
+</body>
+</html>
