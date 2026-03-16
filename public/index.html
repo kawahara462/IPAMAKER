@@ -9,12 +9,13 @@
 
 <h2>Cloud IPA Builder</h2>
 
-<p>Limits:</p>
+<p>Limits</p>
+
 <ul>
 <li>1 build per hour</li>
 <li>3 builds per day</li>
-<li>Max file: 0.5GB</li>
-<li>Files auto delete after 24h</li>
+<li>Max file 0.5GB</li>
+<li>Files delete after 24h</li>
 </ul>
 
 <input type="file" id="file">
@@ -23,6 +24,10 @@
 
 <pre id="log"></pre>
 
+<h3>Builds</h3>
+
+<ul id="builds"></ul>
+
 <script>
 
 async function upload(){
@@ -30,7 +35,7 @@ async function upload(){
 let file=document.getElementById("file").files[0]
 
 if(!file){
- alert("select file")
+ alert("Select file")
  return
 }
 
@@ -40,21 +45,48 @@ if(file.size>500*1024*1024){
 }
 
 let form=new FormData()
-
 form.append("file",file)
 
 document.getElementById("log").textContent="Uploading..."
 
-let res=await fetch("/upload",{
- method:"POST",
- body:form
-})
+let res=await fetch("/upload",{method:"POST",body:form})
 
 let txt=await res.text()
 
 document.getElementById("log").textContent=txt
 
+loadBuilds()
+
 }
+
+async function loadBuilds(){
+
+let res=await fetch("/builds")
+
+let data=await res.json()
+
+let ul=document.getElementById("builds")
+
+ul.innerHTML=""
+
+data.forEach(f=>{
+
+let li=document.createElement("li")
+
+let a=document.createElement("a")
+
+a.href="/builds/"+f
+a.textContent=f
+
+li.appendChild(a)
+
+ul.appendChild(li)
+
+})
+
+}
+
+loadBuilds()
 
 </script>
 
