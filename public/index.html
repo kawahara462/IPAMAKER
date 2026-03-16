@@ -15,7 +15,7 @@
 <li>1 build per hour</li>
 <li>3 builds per day</li>
 <li>Max file 0.5GB</li>
-<li>Files delete after 24h</li>
+<li>Files deleted after 24h</li>
 </ul>
 
 <input type="file" id="file">
@@ -45,6 +45,7 @@ if(file.size>500*1024*1024){
 }
 
 let form=new FormData()
+
 form.append("file",file)
 
 document.getElementById("log").textContent="Uploading..."
@@ -76,6 +77,7 @@ let li=document.createElement("li")
 let a=document.createElement("a")
 
 a.href="/builds/"+f
+
 a.textContent=f
 
 li.appendChild(a)
